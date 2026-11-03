@@ -20,6 +20,10 @@ import { spawnSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const LANCUCH = path.join(ROOT, 'lancuch.jsonl');
+// Wydanie częściowe (plik .czesciowe w repozytorium): akta publikujemy partiami, więc odwołanie do sprawy albo rodzica,
+// których jeszcze nie opublikowaliśmy, jest uwagą, a nie błędem. Odcisk liczymy z obecnych rodziców; gdy rodzic dojdzie,
+// zmiana odcisku trafia do łańcucha jawnie, z powodem.
+const CZESCIOWE = fs.existsSync(path.join(ROOT, '.czesciowe'));
 // Lista nazwisk osób spoza fundacji do blokowania: poza repozytorium, ścieżka w zmiennej OMNIACTA_PRYWATNE.
 // Plik .dpapi jest zaszyfrowany kluczem konta Windows (DPAPI) i odszyfrowuje go tylko to konto.
 function prywatne() {
@@ -130,7 +134,7 @@ export function sprawdz({ zdarzenia, sprawy }) {
     if (path.basename(s.plik, '.md') !== s.id) bledy.push(s.plik + ': nazwa pliku inna niż id');
     if (!STANY_SPRAW.includes(s.stan)) bledy.push(s.plik + ': stan spoza listy ' + STANY_SPRAW.join('/'));
     if (!/^\d{4}-\d{2}-\d{2}$/.test(s.otwarta || '')) bledy.push(s.plik + ': „otwarta” w formacie RRRR-MM-DD');
-    for (const x of [...s.z, ...s.w]) if (!sIds.has(x)) bledy.push(s.plik + ': nieznana sprawa ' + x);
+    for (const x of [...s.z, ...s.w]) if (!sIds.has(x)) (CZESCIOWE ? uwagi : bledy).push(s.plik + ': nieznana sprawa ' + x + (CZESCIOWE ? ' (jeszcze nieopublikowana)' : ''));
     for (const l of ['pl', 'en']) if (!s.teksty[l]?.tytul) bledy.push(s.plik + ': brak tytułu ' + l.toUpperCase());
   }
   for (const z of zdarzenia) {
@@ -139,8 +143,8 @@ export function sprawdz({ zdarzenia, sprawy }) {
     if (!TYPY.includes(z.typ)) bledy.push(z.plik + ': typ spoza listy ' + TYPY.join('/'));
     if (!/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(z.data || '')) bledy.push(z.plik + ': „data” w formacie RRRR-MM-DD albo RRRR-MM-DD GG:MM');
     if (!z.sprawy.length) bledy.push(z.plik + ': brak sprawy');
-    for (const s of z.sprawy) if (!sIds.has(s)) bledy.push(z.plik + ': nieznana sprawa ' + s);
-    for (const r of z.rodzice) if (!zdarzenia.some(x => x.id === r)) bledy.push(z.plik + ': nieznany rodzic ' + r);
+    for (const s of z.sprawy) if (!sIds.has(s)) (CZESCIOWE ? uwagi : bledy).push(z.plik + ': nieznana sprawa ' + s + (CZESCIOWE ? ' (jeszcze nieopublikowana)' : ''));
+    for (const r of z.rodzice) if (!zdarzenia.some(x => x.id === r)) (CZESCIOWE ? uwagi : bledy).push(z.plik + ': nieznany rodzic ' + r + (CZESCIOWE ? ' (jeszcze nieopublikowany)' : ''));
       else if (zdarzenia.find(x => x.id === r).data > z.data) bledy.push(z.plik + ': rodzic ' + r + ' jest późniejszy');
     if (!z.kto.length) bledy.push(z.plik + ': brak pola „kto” (rola)');
     for (const l of ['pl', 'en']) if (!z.teksty[l]?.tytul || !z.teksty[l]?.tekst) bledy.push(z.plik + ': brak tytułu albo tekstu ' + l.toUpperCase());
