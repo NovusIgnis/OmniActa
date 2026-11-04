@@ -1,0 +1,25 @@
+name: Czegoś brakuje w aktach / Something is missing from the records
+description: Wiesz o spotkaniu, rozmowie, decyzji albo płatności, której nie ma w aktach? / You know of a meeting, conversation, decision or payment that is not in the records?
+title: "Brak wpisu: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Kontakt z kimś, kto może otrzymać pieniądze fundacji, a którego nie ma w aktach, traktujemy jako błąd fundacji. Odpowiadamy publicznie w tym zgłoszeniu i dopisujemy wpis o błędzie. Nie podawaj danych osobowych innych osób.
+
+        We treat a contact with someone who may receive the foundation's money, missing from the records, as a mistake of the foundation. We answer publicly in this issue and add an entry on the mistake. Please do not include other people's personal data.
+  - type: textarea
+    id: what
+    attributes:
+      label: Co się wydarzyło / What happened
+      description: Kto (rola albo nazwa firmy lub instytucji), co i gdzie. / Who (role, or the name of a company or institution), what and where.
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: Kiedy, choćby w przybliżeniu / When, even roughly
+  - type: textarea
+    id: source
+    attributes:
+      label: Skąd o tym wiesz (nieobowiązkowe) / How you know (optional)

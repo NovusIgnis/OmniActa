@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Pytania i rozmowa o fundacji / Questions and conversation about the foundation
+    url: https://github.com/NovusIgnis/OmniVox/discussions
+    about: Pytania o akta, decyzje i dokumenty zadawaj w dyskusjach; odpowiadamy publicznie. / Ask about the records, decisions and documents in the discussions; we answer publicly.

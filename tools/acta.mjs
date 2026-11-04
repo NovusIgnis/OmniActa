@@ -2,9 +2,9 @@
 /**
  * OmniActa · narzędzie repozytorium.
  *
- *   node narzedzia/acta.mjs sprawdz            kontrola: pola, odnośniki, daty, prywatność, łańcuch
- *   node narzedzia/acta.mjs dopisz [--powod "…"]   dopisuje do lancuch.jsonl nowe i zmienione wpisy
- *   node narzedzia/acta.mjs wydanie [--podglad]    zapisuje wydanie/acta.json (dla strony) i wydanie/acta.jsonl (zbiór)
+ *   node tools/acta.mjs sprawdz            kontrola: pola, odnośniki, daty, prywatność, łańcuch
+ *   node tools/acta.mjs dopisz [--powod "…"]   dopisuje do chain.jsonl nowe i zmienione wpisy
+ *   node tools/acta.mjs wydanie [--podglad]    zapisuje release/acta.json (dla strony) i release/acta.jsonl (zbiór)
  *
  * Wpisy: sprawy/<id>.md i zdarzenia/<rok>/<miesiąc>/<id>.md. Każde zdarzenie ma odcisk SHA-256 liczony z jego treści
  * i z odcisków rodziców (zdarzeń, z których wynika), więc całość tworzy drzewo Merkla w postaci grafu bez cykli:
@@ -19,11 +19,16 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const LANCUCH = path.join(ROOT, 'lancuch.jsonl');
-// Wydanie częściowe (plik .czesciowe w repozytorium): akta publikujemy partiami, więc odwołanie do sprawy albo rodzica,
+// Nazwy folderów (decyzja fundatora z 4.11.2026): w publicznych aktach po angielsku (events, documents, release, chain.jsonl,
+// .partial), w roboczej kopii fundacji zostają polskie (zdarzenia, sprawy, wydanie, lancuch.jsonl, .czesciowe). Narzędzie rozpoznaje oba układy.
+const jest = n => fs.existsSync(path.join(ROOT, n));
+const KAT = (en, pl) => (jest(en) || !jest(pl)) ? en : pl;
+const ZDARZENIA = KAT('events', 'zdarzenia'), SPRAWY = KAT('matters', 'sprawy'), WYDANIE = KAT('release', 'wydanie'), DOKUMENTY = 'documents';
+const LANCUCH = path.join(ROOT, KAT('chain.jsonl', 'lancuch.jsonl')), LN = path.basename(LANCUCH);
+// Wydanie częściowe (plik .partial albo .czesciowe w repozytorium): akta publikujemy partiami, więc odwołanie do sprawy albo rodzica,
 // których jeszcze nie opublikowaliśmy, jest uwagą, a nie błędem. Odcisk liczymy z obecnych rodziców; gdy rodzic dojdzie,
 // zmiana odcisku trafia do łańcucha jawnie, z powodem.
-const CZESCIOWE = fs.existsSync(path.join(ROOT, '.czesciowe'));
+const CZESCIOWE = jest('.partial') || jest('.czesciowe');
 // Lista nazwisk osób spoza fundacji do blokowania: poza repozytorium, ścieżka w zmiennej OMNIACTA_PRYWATNE.
 // Plik .dpapi jest zaszyfrowany kluczem konta Windows (DPAPI) i odszyfrowuje go tylko to konto.
 function prywatne() {
@@ -84,11 +89,11 @@ const rel = f => path.relative(ROOT, f).split(path.sep).join('/');
 const kanon = raw => raw.replace(/\r\n?/g, '\n').split('\n').filter(l => !/^publikacja:/.test(l)).map(l => l.replace(/\s+$/, '')).join('\n').trim() + '\n';
 
 export function wczytaj() {
-  const sprawy = walk(path.join(ROOT, 'sprawy')).map(f => {
+  const sprawy = walk(path.join(ROOT, SPRAWY)).map(f => {
     const { meta, body, raw } = frontMatter(fs.readFileSync(f, 'utf8'), rel(f));
     return { plik: rel(f), ...meta, z: list(meta.z), w: list(meta.w), teksty: langs(body), skrot: sha('sprawa\n' + kanon(raw)) };
   }).sort((a, b) => (a.otwarta || '').localeCompare(b.otwarta || '') || a.id.localeCompare(b.id));
-  const zdarzenia = walk(path.join(ROOT, 'zdarzenia')).map(f => {
+  const zdarzenia = walk(path.join(ROOT, ZDARZENIA)).map(f => {
     const { meta, body, raw } = frontMatter(fs.readFileSync(f, 'utf8'), rel(f));
     return { plik: rel(f), ...meta, sprawy: list(meta.sprawy), rodzice: list(meta.rodzice), kto: list(meta.kto), uprzedzic: list(meta.uprzedzic),
       zrodla: (meta.zrodla || '').split(';').map(s => s.trim()).filter(Boolean), teksty: langs(body), _kanon: kanon(raw) };
@@ -105,7 +110,12 @@ export function wczytaj() {
     done.set(z.id, h); return h;
   };
   for (const z of zdarzenia) z.skrot = odcisk(z);
-  return { sprawy, zdarzenia };
+  // dokumenty (manifest, whitepapery, statut): każda wersja ma odcisk z treści i wiersz w łańcuchu, więc cicha zmiana wychodzi przy kontroli
+  const dokumenty = walk(path.join(ROOT, DOKUMENTY)).map(f => {
+    const raw = fs.readFileSync(f, 'utf8').replace(/\r\n?/g, '\n').split('\n').map(l => l.replace(/\s+$/, '')).join('\n').trim() + '\n';
+    return { plik: rel(f), id: rel(f).replace(/\.md$/, ''), skrot: sha('dokument\n' + raw) };
+  });
+  return { sprawy, zdarzenia, dokumenty };
 }
 
 // ---------------------------------------------------------------- kontrola
@@ -123,9 +133,12 @@ const pesel = t => (t.match(/\b\d{11}\b/g) || []).find(n => (10 - [1, 3, 7, 9, 1
 // Adresy fundacji, które mogą się pojawić.
 const DOZWOLONE = [/salve@novusignis\.org/g, /https?:\/\/\S+/g];
 
-export function sprawdz({ zdarzenia, sprawy }) {
+export function sprawdz({ zdarzenia, sprawy, dokumenty = [] }) {
   const bledy = [], uwagi = [];
   const ids = new Set(), sIds = new Set(sprawy.map(s => s.id));
+  // Surowy rejestr (decyzja fundatora z 4.11.2026): bez folderu sprawy/ pole „sprawy” w zdarzeniu to etykieta wątku,
+  // a opisy spraw, chronologię i opowieść układa strona fundacji, później Omniforum.
+  const ETYKIETY = sprawy.length === 0;
   const lista = prywatne();
   if (lista === null) uwagi.push('brak prywatnej listy nazwisk (zmienna OMNIACTA_PRYWATNE): kontrola nazwisk pominięta');
   const nazwiska = lista || [];
@@ -143,7 +156,10 @@ export function sprawdz({ zdarzenia, sprawy }) {
     if (!TYPY.includes(z.typ)) bledy.push(z.plik + ': typ spoza listy ' + TYPY.join('/'));
     if (!/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(z.data || '')) bledy.push(z.plik + ': „data” w formacie RRRR-MM-DD albo RRRR-MM-DD GG:MM');
     if (!z.sprawy.length) bledy.push(z.plik + ': brak sprawy');
-    for (const s of z.sprawy) if (!sIds.has(s)) (CZESCIOWE ? uwagi : bledy).push(z.plik + ': nieznana sprawa ' + s + (CZESCIOWE ? ' (jeszcze nieopublikowana)' : ''));
+    for (const s of z.sprawy) {
+      if (!/^[a-z0-9-]+$/.test(s)) bledy.push(z.plik + ': etykieta sprawy tylko małe litery, cyfry i „-” (' + s + ')');
+      else if (!ETYKIETY && !sIds.has(s)) (CZESCIOWE ? uwagi : bledy).push(z.plik + ': nieznana sprawa ' + s + (CZESCIOWE ? ' (jeszcze nieopublikowana)' : ''));
+    }
     for (const r of z.rodzice) if (!zdarzenia.some(x => x.id === r)) (CZESCIOWE ? uwagi : bledy).push(z.plik + ': nieznany rodzic ' + r + (CZESCIOWE ? ' (jeszcze nieopublikowany)' : ''));
       else if (zdarzenia.find(x => x.id === r).data > z.data) bledy.push(z.plik + ': rodzic ' + r + ' jest późniejszy');
     if (!z.kto.length) bledy.push(z.plik + ': brak pola „kto” (rola)');
@@ -171,13 +187,16 @@ export function sprawdz({ zdarzenia, sprawy }) {
   const ostatni = new Map();
   wiersze.forEach((w, i) => {
     const { ten, ...reszta } = w;
-    if (w.poprzedni !== prev) bledy.push('lancuch.jsonl: wiersz ' + (i + 1) + ' nie wskazuje poprzedniego');
-    if (sha(JSON.stringify(reszta)) !== ten) bledy.push('lancuch.jsonl: wiersz ' + (i + 1) + ' zmieniony po zapisaniu');
+    if (w.poprzedni !== prev) bledy.push(LN + ': wiersz ' + (i + 1) + ' nie wskazuje poprzedniego');
+    if (sha(JSON.stringify(reszta)) !== ten) bledy.push(LN + ': wiersz ' + (i + 1) + ' zmieniony po zapisaniu');
     prev = ten; ostatni.set(w.id, w.skrot);
   });
-  const niezapisane = [...sprawy.map(s => [s.id, s.skrot]), ...zdarzenia.map(z => [z.id, z.skrot])].filter(([id, h]) => ostatni.get(id) !== h);
-  if (wiersze.length && niezapisane.length) uwagi.push('lancuch.jsonl: ' + niezapisane.length + ' wpisów nowych albo zmienionych od ostatniego dopisania (node narzedzia/acta.mjs dopisz)');
-  return { bledy, uwagi, niezapisane };
+  const niezapisane = [...sprawy.map(s => [s.id, s.skrot]), ...zdarzenia.map(z => [z.id, z.skrot]), ...dokumenty.map(d => [d.id, d.skrot])].filter(([id, h]) => ostatni.get(id) !== h);
+  if (wiersze.length && niezapisane.length) uwagi.push(LN + ': ' + niezapisane.length + ' wpisów nowych albo zmienionych od ostatniego dopisania (polecenie dopisz)');
+  // wpis zapisany w łańcuchu, którego nie ma już w repozytorium: usunięcie musi być jawnie zapisane w łańcuchu (pusty skrót i powód)
+  const obecne = new Set([...sprawy.map(s => s.id), ...zdarzenia.map(z => z.id), ...dokumenty.map(d => d.id)]);
+  const zniknione = [...ostatni].filter(([id, h]) => h && !obecne.has(id)).map(([id]) => id);
+  return { bledy, uwagi, niezapisane, zniknione };
 }
 
 // ---------------------------------------------------------------- łańcuch
@@ -187,11 +206,19 @@ function dopisz(dane, powod) {
   let prev = wiersze.length ? wiersze[wiersze.length - 1].ten : '';
   const czas = new Date().toISOString();
   const nowe = [];
-  for (const [rodzaj, wpis] of [...dane.sprawy.map(s => ['sprawa', s]), ...dane.zdarzenia.map(z => ['zdarzenie', z])]) {
+  for (const [rodzaj, wpis] of [...dane.sprawy.map(s => ['sprawa', s]), ...dane.zdarzenia.map(z => ['zdarzenie', z]), ...(dane.dokumenty || []).map(d => ['dokument', d])]) {
     if (ostatni.get(wpis.id) === wpis.skrot) continue;
     const zmiana = ostatni.has(wpis.id);
     if (zmiana && !powod) throw new Error('Wpis ' + wpis.id + ' zmienił się po zapisaniu w łańcuchu: podaj --powod "…" (zmiana zostanie jawnie odnotowana).');
     const w = { n: wiersze.length + nowe.length + 1, czas, rodzaj, id: wpis.id, skrot: wpis.skrot, ...(rodzaj === 'zdarzenie' ? { rodzice: wpis.rodzice } : {}), ...(zmiana ? { zmiana: powod } : {}), poprzedni: prev };
+    w.ten = sha(JSON.stringify(w)); prev = w.ten; nowe.push(w);
+  }
+  const obecne = new Set([...dane.sprawy.map(s => s.id), ...dane.zdarzenia.map(z => z.id), ...(dane.dokumenty || []).map(d => d.id)]);
+  const rodzajWpisu = new Map(wiersze.map(w => [w.id, w.rodzaj]));
+  for (const [id, h] of ostatni) {
+    if (!h || obecne.has(id)) continue;
+    if (!powod) throw new Error('Wpis ' + id + ' zniknął z repozytorium: podaj --powod "…" (usunięcie zostanie jawnie odnotowane).');
+    const w = { n: wiersze.length + nowe.length + 1, czas, rodzaj: rodzajWpisu.get(id), id, skrot: '', usuniety: true, zmiana: powod, poprzedni: prev };
     w.ten = sha(JSON.stringify(w)); prev = w.ten; nowe.push(w);
   }
   if (nowe.length) fs.appendFileSync(LANCUCH, nowe.map(w => JSON.stringify(w)).join('\n') + '\n');
@@ -207,12 +234,12 @@ function wydanie(dane, podglad) {
     sprawy: dane.sprawy.map(({ plik, teksty, skrot, ...s }) => ({ ...s, plik, skrot, pl: teksty.pl, en: teksty.en })),
     zdarzenia: zd.map(({ _kanon, teksty, ...z }) => ({ ...z, archiwum: z.data < PUBLIKACJA_STRONY, pl: teksty.pl, en: teksty.en }))
   };
-  fs.mkdirSync(path.join(ROOT, 'wydanie'), { recursive: true });
-  fs.writeFileSync(path.join(ROOT, 'wydanie', 'acta.json'), JSON.stringify(out, null, 1) + '\n');
+  fs.mkdirSync(path.join(ROOT, WYDANIE), { recursive: true });
+  fs.writeFileSync(path.join(ROOT, WYDANIE, 'acta.json'), JSON.stringify(out, null, 1) + '\n');
   // zbiór do badań: jeden wiersz na zdarzenie, z rejestrem pochodzenia (whitepaper materiałów)
   const jsonl = out.zdarzenia.map(z => JSON.stringify({ id: z.id, typ: z.typ, data: z.data, archiwum: z.archiwum, sprawy: z.sprawy, rodzice: z.rodzice, kto: z.kto, pl: z.pl, en: z.en,
-    pochodzenie: { wlasciciel: 'Fundacja Novus Ignis', licencja: 'CC-BY-4.0', zrodla: z.zrodla, odcisk: z.skrot, dane_osobowe: 'brak (role zamiast nazwisk; kontrola narzedzia/acta.mjs)' } }));
-  fs.writeFileSync(path.join(ROOT, 'wydanie', 'acta.jsonl'), jsonl.join('\n') + '\n');
+    pochodzenie: { wlasciciel: 'Fundacja Novus Ignis', licencja: 'CC-BY-4.0', zrodla: z.zrodla, odcisk: z.skrot, dane_osobowe: 'brak (role zamiast nazwisk; kontrola tools/acta.mjs)' } }));
+  fs.writeFileSync(path.join(ROOT, WYDANIE, 'acta.jsonl'), jsonl.join('\n') + '\n');
   return out;
 }
 
@@ -222,8 +249,9 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const opt = n => { const i = args.indexOf(n); return i >= 0 ? (args[i + 1] && !args[i + 1].startsWith('--') ? args[i + 1] : true) : null; };
   const dane = wczytaj();
   if (cmd === 'sprawdz' || !cmd) {
-    const { bledy, uwagi } = sprawdz(dane);
-    console.log('Sprawy: ' + dane.sprawy.length + ', zdarzenia: ' + dane.zdarzenia.length + ' (archiwum: ' + dane.zdarzenia.filter(z => z.data < PUBLIKACJA_STRONY).length + ').');
+    const { bledy, uwagi, zniknione } = sprawdz(dane);
+    for (const id of zniknione) bledy.push(LN + ': wpis ' + id + ' zniknął z repozytorium bez zapisu w łańcuchu (polecenie dopisz --powod "…")');
+    console.log('Sprawy: ' + dane.sprawy.length + ', zdarzenia: ' + dane.zdarzenia.length + ' (archiwum: ' + dane.zdarzenia.filter(z => z.data < PUBLIKACJA_STRONY).length + ')' + (dane.dokumenty.length ? ', dokumenty: ' + dane.dokumenty.length : '') + '.');
     uwagi.forEach(u => console.log('  uwaga: ' + u));
     bledy.forEach(b => console.log('  BŁĄD: ' + b));
     console.log(bledy.length ? 'Błędów: ' + bledy.length + '.' : 'Bez błędów.');
@@ -232,7 +260,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
     const { bledy } = sprawdz(dane);
     if (bledy.length) { bledy.forEach(b => console.log('  BŁĄD: ' + b)); console.log('Najpierw popraw błędy.'); process.exit(1); }
     const nowe = dopisz(dane, opt('--powod'));
-    console.log('Dopisano do lancuch.jsonl: ' + nowe.length + ' wierszy.');
+    console.log('Dopisano do ' + LN + ': ' + nowe.length + ' wierszy.');
   } else if (cmd === 'wydanie') {
     const out = wydanie(dane, opt('--podglad'));
     console.log('wydanie/acta.json: ' + out.sprawy.length + ' spraw, ' + out.zdarzenia.length + ' zdarzeń' + (out.podglad ? ' (podgląd: z wpisami czekającymi na uprzedzenie)' : '') + '; wydanie/acta.jsonl.');
