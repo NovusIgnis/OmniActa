@@ -2,7 +2,7 @@
 id: 2026-11-04-akta-publiczne
 typ: publikacja
 data: 2026-11-04 00:51
-sprawy: omniacta
+sprawy: kamien-milowy, omniacta
 rodzice: 2026-11-04-bledy-od-razu
 kto: fundator (polecenie wysyłki), Claude (Opus 5.5)
 zrodla: github.com/NovusIgnis/OmniActa commit 2d39748

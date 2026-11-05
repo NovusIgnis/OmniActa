@@ -2,7 +2,7 @@
 id: 2026-11-02-pierwszy-test-drogi
 typ: proba
 data: 2026-11-02 23:10
-sprawy: dostawca-confidential-ai, srodowisko-agentow
+sprawy: kamien-milowy, dostawca-confidential-ai, srodowisko-agentow
 rodzice: 2026-11-02-cai-klucz
 kto: Claude (Opus 5.5), fundator
 zrodla: Research/dostawcy-2026-11/odpowiedzi/confidential-ai-2026-11-02/test/WYNIK.md
