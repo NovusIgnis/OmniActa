@@ -7,6 +7,7 @@ rodzice: 2026-11-05-formularz-obiecywal-wiecej, 2026-11-03-jev-i-clef
 kto: fundator (decyzja), Claude (Opus 5.5)
 zrodla: Claude/pamiec/00-pamiec-rdzen.md (05.11.2026, 20:34–20:58); Research/agenci/delegacje/METODA.md (wersja 0.1)
 dokladnosc: dzien
+publikacja: 2026-11-06
 ---
 
 ## PL

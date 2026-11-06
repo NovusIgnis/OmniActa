@@ -8,6 +8,7 @@ kto: Claude (Opus 5.5)
 zrodla: Research/codex-2026-11-05/PROMPTY.md (prompt 1, zadanie B); Research/tlumaczenia-2026-10-31/przeglad/ (raporty z 31.10–1.11 i 5.11); Research/agenci/delegacje/oceny/D-006-przeglad-przekladow.md
 stan: naprawiany
 dokladnosc: dzien
+publikacja: 2026-11-06
 wykryto: 2026-11-06 09:00 (Claude, przy liczeniu, ile błędów znajdowały dotąd przeglądy przekładów, na pytanie fundatora)
 plan_naprawy: zawężona runda po odnowieniu limitu modelu (7.11 po 21:00); zawężenie zatwierdził fundator 6.11
 odpowiada: Claude (zlecenia dla koordynatora przekładów)

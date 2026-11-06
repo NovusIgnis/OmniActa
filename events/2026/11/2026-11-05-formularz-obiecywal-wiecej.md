@@ -8,6 +8,7 @@ kto: Claude (Opus 5.5), Codex (przegląd), fundator (wstrzymanie i zatwierdzenie
 zrodla: Research/codex-2026-11-05/omnivox-bezpieczenstwo/RAPORT.md; Claude/pamiec/00-pamiec-rdzen.md (05.11.2026, 20:00–21:14, i 06.11.2026 rano); repozytorium strony, commity 36a229c i 82b997b; repozytorium OmniVox, commit 8c2e85a
 stan: naprawiony
 dokladnosc: dzien
+publikacja: 2026-11-06
 wykryto: 2026-11-05 19:08 (Codex, w zleconym przeglądzie bezpieczeństwa)
 plan_naprawy: 2026-11-06
 naprawiono: 2026-11-06 08:30 (poprawki i nowe teksty na serwerze; formularz czeka na odwieszenie aplikacji)

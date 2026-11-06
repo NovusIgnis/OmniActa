@@ -7,6 +7,7 @@ rodzice: 2026-11-05-sesja-popoludniowa
 kto: Claude (Opus 5.5), fundator (zatwierdzenie)
 zrodla: Claude/pamiec/00-pamiec-rdzen.md (wpisy z 05.11.2026, 18:50–21:14, i 06.11.2026 rano); OmniActa commit 4ba7af2
 dokladnosc: dzien
+publikacja: 2026-11-06
 ---
 
 ## PL

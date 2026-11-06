@@ -7,6 +7,7 @@ rodzice: 2026-11-05-sesja-wieczorna
 kto: Claude (Opus 5.5), fundator (zatwierdzenie)
 zrodla: Claude/pamiec/00-pamiec-rdzen.md (wpisy z 06.11.2026, 08:01–09:13); Research/agenci/delegacje/proby/D-006/README.md
 dokladnosc: dzien
+publikacja: 2026-11-06
 ---
 
 ## PL
