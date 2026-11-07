@@ -3,7 +3,7 @@ id: 2026-10-26-przeglad-historii
 typ: raport
 data: 2026-10-26 18:00
 sprawy: redakcja, manifest, whitepapery, statut, standard-redakcyjny, suveria
-rodzice: 2026-09-06-precedensy-wolnosci, 2026-09-09-moduly-badawcze, 2026-09-25-plan-pierwszej-publikacji, 2026-10-19-wolontariat, 2026-10-21-bez-dlugich-myslnikow, 2026-10-24-teksty-towarzyszace-usuniete, 2026-10-26-claude-dolacza, 2026-09-28-rozszerzenie-uchylone
+rodzice: 2026-09-06-precedensy-wolnosci, 2026-09-09-moduly-badawcze, 2026-09-25-plan-pierwszej-publikacji, 2026-10-19-wolontariat, 2026-10-26-claude-dolacza, 2026-09-28-rozszerzenie-uchylone
 kto: Claude (rozmowa w claude.ai)
 zrodla: Claude/pamiec/archiwum-2026-10.md:5-25; Claude/pamiec/02-rejestr.md:9-21; wyjaśnienie fundatora 04.11.2026
 odtworzono: 2026-11-03

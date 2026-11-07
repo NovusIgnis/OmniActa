@@ -3,7 +3,7 @@ id: 2025-12-27-cztery-kryteria
 typ: proba
 data: 2025-12-27 13:52
 sprawy: drzewo-wartosci
-rodzice: 2025-08-27-cztery-filary, 2025-12-27-meskie-wzorce
+rodzice: 2025-08-27-cztery-filary
 kto: fundator, współprowadzący podcastu
 zrodla: YouTube 3WqgMgt13dU [00:45:27]; YouTube 3WqgMgt13dU [00:50:31]; YouTube 3WqgMgt13dU [00:51:32]; YouTube 3WqgMgt13dU [01:38:08]; YouTube 3WqgMgt13dU [02:12:42]
 odtworzono: 2026-11-03
