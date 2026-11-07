@@ -12,12 +12,12 @@ Repozytorium zaczęliśmy 4 listopada 2026 r. od jednego wpisu w rejestrze błę
 
 ## Zdarzenia
 
-- **Zdarzenie** (`events/<rok>/<miesiąc>/<id>.md`) to jeden krok pracy fundacji. Rodzaje: `pomysl`, `decyzja`, `dzialanie`, `proba`, `wynik`, `blad`, `korekta`, `publikacja`, `rozdzielenie`, `polaczenie`, `raport`. Pole `rodzice` wskazuje zdarzenia, z których to zdarzenie wynika.
+- **Zdarzenie** (`events/<rok>/<miesiąc>/<id>.md`) to jeden krok pracy fundacji. Rodzaje: `pomysl`, `decyzja`, `dzialanie`, `proba`, `wynik`, `blad`, `korekta`, `publikacja`, `rozdzielenie`, `polaczenie`, `raport`. Pole `rodzice` wskazuje zdarzenia, z których to zdarzenie wynika. Od 7 listopada 2026 r. są w nim tylko zdarzenia już opublikowane; gdy rodzic zostanie opublikowany później, dopisujemy go, a łańcuch zapisuje zmianę z powodem. Starsze wpisy mogą jeszcze wskazywać zdarzenie, które czeka na publikację.
 - Pole `sprawy` to etykiety wątków, do których zdarzenie należy według autora wpisu. Strona i Omniforum mogą z nich układać sprawy i grupować zdarzenia po swojemu. To, że wątek się rozdzielił albo połączył z innym, zapisujemy jako zdarzenie (`rozdzielenie`, `polaczenie`).
 - Etykieta `kamien-milowy` oznacza zdarzenia, które fundator uznaje za ważny krok fundacji. Strona ma pokazywać je jako oś najważniejszych chwil, razem z tym, co do nich doprowadziło (projekt).
 - **Decyzja** ma części z punktu 12.1 whitepapera zasad: cel, warianty, kogo dotyczy, wykonanie (z podstawą), przegląd.
 - **Błąd** ma części z punktu 8.1 manifestu: co się stało, skutki, przyczyna, naprawa, wniosek, sprawdzenie. W nagłówku podaje czas wykrycia (`wykryto`), planu naprawy (`plan_naprawy`) i naprawy (`naprawiono`), osobę odpowiedzialną (`odpowiada`) i termin sprawdzenia (`sprawdzenie_do`). Błąd publikujemy od razu po wykryciu, a nie zbiorczo; jeśli naprawa potrwa, najpierw publikujemy znalezisko i plan naprawy, a naprawę dopisujemy później.
-- Każdy wpis ma treść po polsku (`## PL`) i po angielsku (`## EN`).
+- Każdy wpis ma treść po polsku (`## PL`) i po angielsku (`## EN`). Polską wersję zatwierdza fundator, a angielską przygotowuje z niej cyfrowa inteligencja; gdy się różnią, obowiązuje polska.
 
 ## Dokumenty
 
