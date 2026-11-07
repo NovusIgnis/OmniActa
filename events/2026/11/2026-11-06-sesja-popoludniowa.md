@@ -3,7 +3,7 @@ id: 2026-11-06-sesja-popoludniowa
 typ: raport
 data: 2026-11-06 13:20
 sprawy: hosting-i-domeny, finanse-i-jawnosc, dostawcy, komunikacja, komputer-agentow, sposob-pracy, omniacta
-rodzice:
+rodzice: 2026-11-06-sesja-poludniowa
 kto: Claude (Opus 5.5), fundator (zatwierdzenie)
 zrodla: Claude/pamiec/00-pamiec-rdzen.md (wpisy z 06.11.2026, 13:20–14:50); Claude/pamiec/sesje/dostawcy.md (06.11.2026, do 15:41) i sprzet.md (do 15:26); Research/kontakty/infomaniak.md; Research/infrastruktura/PLAN-SPRZETU-2026-11.md; omniacta-publiczne, commit 54ce0e4
 dokladnosc: dzien
