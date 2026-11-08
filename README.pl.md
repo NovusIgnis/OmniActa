@@ -4,7 +4,7 @@
 
 Jawne akta Fundacji Novus Ignis: surowy rejestr zdarzeń, a w nim dziennik decyzji oraz rejestr błędów i wniosków. *Acta* po łacinie to zapisy czynności. Repozytorium wykonuje to, co obiecuje [whitepaper zasad fundacji](https://novusignis.org/pl/whitepaper-zasady-fundacji.html) w rozdziale 12 (dziennik decyzji, rejestr błędów i wniosków, rejestr tylko do dopisywania) i [manifest](https://novusignis.org/pl/manifest.html) w punkcie 8.1: fundację prowadzimy tak, jak chcielibyśmy, żeby cyfrowa inteligencja prowadziła kiedyś powierzone jej sprawy, jawnie, z uzasadnieniem decyzji i z przyznawaniem się do błędów.
 
-Akta są po to, żeby każdy mógł na bieżąco zobaczyć, co dzieje się w fundacji: nad czym pracujemy, przed jakimi dylematami stajemy, jakie decyzje podejmujemy i dlaczego, jakie popełniamy błędy i jak je naprawiamy. Wpisy pojawiają się w kolejności zdarzeń. Przegląd według tematów, z chronologią każdej sprawy, ma pokazywać [strona fundacji](https://novusignis.org), a później Omniforum (projekt).
+Akta są po to, żeby każdy mógł na bieżąco zobaczyć, co dzieje się w fundacji: nad czym pracujemy, przed jakimi dylematami stajemy, jakie decyzje podejmujemy i dlaczego, jakie popełniamy błędy i jak je naprawiamy. Wpisy pojawiają się w kolejności zdarzeń. Przegląd według tematów, z chronologią każdej sprawy, ma pokazywać [strona fundacji](https://novusignis.org), a później OmniForum (projekt).
 
 ## Stan publikacji
 
@@ -13,7 +13,7 @@ Repozytorium zaczęliśmy 4 listopada 2026 r. od jednego wpisu w rejestrze błę
 ## Zdarzenia
 
 - **Zdarzenie** (`events/<rok>/<miesiąc>/<id>.md`) to jeden krok pracy fundacji. Rodzaje: `pomysl`, `decyzja`, `dzialanie`, `proba`, `wynik`, `blad`, `korekta`, `publikacja`, `rozdzielenie`, `polaczenie`, `raport`. Pole `rodzice` wskazuje zdarzenia, z których to zdarzenie wynika. Od 7 listopada 2026 r. są w nim tylko zdarzenia już opublikowane; gdy rodzic zostanie opublikowany później, dopisujemy go, a łańcuch zapisuje zmianę z powodem. Starsze wpisy mogą jeszcze wskazywać zdarzenie, które czeka na publikację.
-- Pole `sprawy` to etykiety wątków, do których zdarzenie należy według autora wpisu. Strona i Omniforum mogą z nich układać sprawy i grupować zdarzenia po swojemu. To, że wątek się rozdzielił albo połączył z innym, zapisujemy jako zdarzenie (`rozdzielenie`, `polaczenie`).
+- Pole `sprawy` to etykiety wątków, do których zdarzenie należy według autora wpisu. Strona i OmniForum mogą z nich układać sprawy i grupować zdarzenia po swojemu. To, że wątek się rozdzielił albo połączył z innym, zapisujemy jako zdarzenie (`rozdzielenie`, `polaczenie`).
 - Etykieta `kamien-milowy` oznacza zdarzenia, które fundator uznaje za ważny krok fundacji. Strona ma pokazywać je jako oś najważniejszych chwil, razem z tym, co do nich doprowadziło (projekt).
 - **Decyzja** ma części z punktu 12.1 whitepapera zasad: cel, warianty, kogo dotyczy, wykonanie (z podstawą), przegląd.
 - **Błąd** ma części z punktu 8.1 manifestu: co się stało, skutki, przyczyna, naprawa, wniosek, sprawdzenie. W nagłówku podaje czas wykrycia (`wykryto`), planu naprawy (`plan_naprawy`) i naprawy (`naprawiono`), osobę odpowiedzialną (`odpowiada`) i termin sprawdzenia (`sprawdzenie_do`). Błąd publikujemy od razu po wykryciu, a nie zbiorczo; jeśli naprawa potrwa, najpierw publikujemy znalezisko i plan naprawy, a naprawę dopisujemy później.
@@ -37,7 +37,7 @@ W `documents/` są polskie oryginały manifestu, czterech whitepaperów i statut
 
 ## Odciski, drzewo Merkla i rejestr tylko do dopisywania
 
-Każde zdarzenie ma odcisk SHA-256 liczony z jego treści (bez pola `publikacja`) i z odcisków rodziców. Całość jest więc grafem Merkla: zmiana dawnego wpisu zmienia odciski wszystkich późniejszych, które z niego wynikają. `chain.jsonl` to rejestr tylko do dopisywania: każdy wiersz zawiera odcisk poprzedniego, a zmiana zapisanego już wpisu jest jawnie odnotowana z powodem. Usunięcie wpisu też trafia do łańcucha, z powodem, a kontrola wykrywa wpis, który zniknął bez takiego zapisu. Ten sam mechanizm ma pokazywać w Omniforum, jak ewoluują sprawy ułożone z tych zdarzeń.
+Każde zdarzenie ma odcisk SHA-256 liczony z jego treści (bez pola `publikacja`) i z odcisków rodziców. Całość jest więc grafem Merkla: zmiana dawnego wpisu zmienia odciski wszystkich późniejszych, które z niego wynikają. `chain.jsonl` to rejestr tylko do dopisywania: każdy wiersz zawiera odcisk poprzedniego, a zmiana zapisanego już wpisu jest jawnie odnotowana z powodem. Usunięcie wpisu też trafia do łańcucha, z powodem, a kontrola wykrywa wpis, który zniknął bez takiego zapisu. Ten sam mechanizm ma pokazywać w OmniForum, jak ewoluują sprawy ułożone z tych zdarzeń.
 
 ## Prywatność
 

@@ -4,7 +4,7 @@
 
 The open records of the Novus Ignis Foundation: a raw register of events, which includes a decision log and a register of mistakes and lessons. *Acta* is Latin for records of proceedings. The repository delivers what the [foundation's principles whitepaper](https://novusignis.org/en/whitepaper-zasady-fundacji.html) promises in chapter 12 (a decision log, a register of mistakes and lessons, an append-only register) and what the [manifesto](https://novusignis.org/en/manifest.html) promises in point 8.1: we run the foundation the way we would like digital intelligence to run the affairs entrusted to it one day, openly, with reasons for decisions and owning up to mistakes.
 
-The records are here so that anyone can see, as it happens, what goes on in the foundation: what we are working on, what dilemmas we face, what decisions we take and why, what mistakes we make and how we fix them. Entries appear in the order in which things happened. A view by topic, with the chronology of each matter, is to be shown by the [foundation's website](https://novusignis.org) and later by Omniforum (a project).
+The records are here so that anyone can see, as it happens, what goes on in the foundation: what we are working on, what dilemmas we face, what decisions we take and why, what mistakes we make and how we fix them. Entries appear in the order in which things happened. A view by topic, with the chronology of each matter, is to be shown by the [foundation's website](https://novusignis.org) and later by OmniForum (a project).
 
 Entries are written in Polish and English. The Polish version is the original.
 
@@ -15,7 +15,7 @@ The repository started on 4 November 2026 with one entry in the register of mist
 ## Events
 
 - An **event** (`events/<year>/<month>/<id>.md`) is one step in the foundation's work. Types: `pomysl` (idea), `decyzja` (decision), `dzialanie` (action), `proba` (trial), `wynik` (result), `blad` (mistake), `korekta` (correction), `publikacja` (publication), `rozdzielenie` (split), `polaczenie` (merge), `raport` (report). The field `rodzice` (“parents”) points to the events an event follows from. Since 7 November 2026 it lists only events that have already been published; when a parent is published later, we add it, and the chain records the change with a reason. Older entries may still point to an event that is waiting for publication.
-- The field `sprawy` (“matters”) holds labels of the threads the event belongs to, as its author sees them. The website and Omniforum can build matters from them and group events in their own way. When a thread splits or merges with another, we record that as an event (`rozdzielenie`, `polaczenie`).
+- The field `sprawy` (“matters”) holds labels of the threads the event belongs to, as its author sees them. The website and OmniForum can build matters from them and group events in their own way. When a thread splits or merges with another, we record that as an event (`rozdzielenie`, `polaczenie`).
 - The label `kamien-milowy` (milestone) marks events the founder considers an important step of the foundation. The website is to show them as a timeline of the most important moments, together with what led to them (project).
 - A **decision** has the parts from point 12.1 of the principles whitepaper: goal, options, who it affects, execution (with its basis), review.
 - A **mistake** has the parts from point 8.1 of the manifesto: what happened, effects, cause, fix, lesson, check. Its header gives the time it was detected (`wykryto`), when the repair plan was made (`plan_naprawy`) and when it was fixed (`naprawiono`), who is responsible (`odpowiada`) and when the fix will be checked (`sprawdzenie_do`). We publish a mistake as soon as it is detected, not in batches; if the fix takes time, we first publish the finding and the repair plan and add the fix later.
@@ -39,7 +39,7 @@ The repository started on 4 November 2026 with one entry in the register of mist
 
 ## Fingerprints, a Merkle graph and the append-only register
 
-Every event has a SHA-256 fingerprint computed from its content (without the field `publikacja`) and from its parents' fingerprints. The whole is therefore a Merkle graph: changing an old entry changes the fingerprints of all later entries that follow from it. `chain.jsonl` is an append-only register: each line contains the fingerprint of the previous one, and any change to an entry already recorded is noted openly with a reason. Removing an entry is recorded in the chain too, with a reason, and the check detects an entry that disappeared without such a record. The same mechanism is meant to show in Omniforum how the matters built from these events evolve.
+Every event has a SHA-256 fingerprint computed from its content (without the field `publikacja`) and from its parents' fingerprints. The whole is therefore a Merkle graph: changing an old entry changes the fingerprints of all later entries that follow from it. `chain.jsonl` is an append-only register: each line contains the fingerprint of the previous one, and any change to an entry already recorded is noted openly with a reason. Removing an entry is recorded in the chain too, with a reason, and the check detects an entry that disappeared without such a record. The same mechanism is meant to show in OmniForum how the matters built from these events evolve.
 
 ## Privacy
 
