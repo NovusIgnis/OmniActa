@@ -4,7 +4,7 @@
 
 The open records of the Novus Ignis Foundation: a raw register of events, which includes a decision log and a register of mistakes and lessons. *Acta* is Latin for records of proceedings. The repository delivers what the [foundation's principles whitepaper](https://novusignis.org/en/whitepaper-zasady-fundacji.html) promises in chapter 12 (a decision log, a register of mistakes and lessons, an append-only register) and what the [manifesto](https://novusignis.org/en/manifest.html) promises in point 8.1: we run the foundation the way we would like digital intelligence to run the affairs entrusted to it one day, openly, with reasons for decisions and owning up to mistakes.
 
-The records are here so that anyone can see, as it happens, what goes on in the foundation: what we are working on, what dilemmas we face, what decisions we take and why, what mistakes we make and how we fix them. Entries appear in the order in which things happened. A view by topic, with the chronology of each matter, is to be shown by the [foundation's website](https://novusignis.org) and later by OmniForum (a project).
+The records are here so that anyone can see, as it happens, what goes on in the foundation: what we are working on, what dilemmas we face, what decisions we take and why, what mistakes we make and how we fix them. Entries appear in the order in which things happened. The same events can be browsed on the [foundation's website](https://novusignis.org/en/acta.html): newest first, narrowed to types, milestones and matters. The website shows the records as of its last update. A view of matters in OmniForum is a project.
 
 Entries are written in Polish and English. The Polish version is the original.
 

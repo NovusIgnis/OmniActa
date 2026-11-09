@@ -4,7 +4,7 @@
 
 Jawne akta Fundacji Novus Ignis: surowy rejestr zdarzeń, a w nim dziennik decyzji oraz rejestr błędów i wniosków. *Acta* po łacinie to zapisy czynności. Repozytorium wykonuje to, co obiecuje [whitepaper zasad fundacji](https://novusignis.org/pl/whitepaper-zasady-fundacji.html) w rozdziale 12 (dziennik decyzji, rejestr błędów i wniosków, rejestr tylko do dopisywania) i [manifest](https://novusignis.org/pl/manifest.html) w punkcie 8.1: fundację prowadzimy tak, jak chcielibyśmy, żeby cyfrowa inteligencja prowadziła kiedyś powierzone jej sprawy, jawnie, z uzasadnieniem decyzji i z przyznawaniem się do błędów.
 
-Akta są po to, żeby każdy mógł na bieżąco zobaczyć, co dzieje się w fundacji: nad czym pracujemy, przed jakimi dylematami stajemy, jakie decyzje podejmujemy i dlaczego, jakie popełniamy błędy i jak je naprawiamy. Wpisy pojawiają się w kolejności zdarzeń. Przegląd według tematów, z chronologią każdej sprawy, ma pokazywać [strona fundacji](https://novusignis.org), a później OmniForum (projekt).
+Akta są po to, żeby każdy mógł na bieżąco zobaczyć, co dzieje się w fundacji: nad czym pracujemy, przed jakimi dylematami stajemy, jakie decyzje podejmujemy i dlaczego, jakie popełniamy błędy i jak je naprawiamy. Wpisy pojawiają się w kolejności zdarzeń. Te same zdarzenia można przeglądać na [stronie fundacji](https://novusignis.org/pl/acta.html): od najnowszego, z zawężeniem do rodzajów, kamieni milowych i spraw. Strona pokazuje stan akt z chwili swojej ostatniej aktualizacji. Przegląd spraw w OmniForum to projekt.
 
 ## Stan publikacji
 
