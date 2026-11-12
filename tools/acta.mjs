@@ -11,6 +11,7 @@
  * zmiana dawnego wpisu zmienia odciski wszystkich późniejszych, które z niego wynikają. lancuch.jsonl to rejestr tylko do
  * dopisywania (whitepaper zasad fundacji, punkt 12.2): każdy wiersz zawiera odcisk poprzedniego wiersza.
  * Pole „publikacja” (data wydania) nie wchodzi do odcisku: ustawiamy je dopiero w dniu publikacji.
+ * Od 12.11.2026 nagłówek może być po angielsku (published, parents, matters…): słownik w slownik-en.json.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -64,7 +65,19 @@ function frontMatter(text, file) {
     if (!kv) throw new Error(file + ': nieczytelny wiersz metadanych: ' + line);
     meta[kv[1]] = kv[2];
   }
-  return { meta, body: m[2].trim() + '\n', raw: t };
+  return { meta: poPolsku(meta), body: m[2].trim() + '\n', raw: t };
+}
+// Nagłówek po angielsku (decyzja fundatora z 12.11.2026): nowe wpisy mają angielskie nazwy pól i wartości. Słownik slownik-en.json
+// leży obok narzędzia; wewnątrz narzędzie zamienia je na polskie, więc dawne wpisy i strona działają bez zmian.
+const SLOWNIK = (() => { const f = path.join(path.dirname(fileURLToPath(import.meta.url)), 'slownik-en.json'); return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')) : { pola: {}, type: {}, accuracy: {}, status: {}, matters: {} }; })();
+function poPolsku(meta) {
+  const out = {};
+  for (const [k, v] of Object.entries(meta)) out[SLOWNIK.pola[k] || k] = v;
+  if (out.typ in SLOWNIK.type) out.typ = SLOWNIK.type[out.typ];
+  if (out.dokladnosc in SLOWNIK.accuracy) out.dokladnosc = SLOWNIK.accuracy[out.dokladnosc];
+  if (out.stan in SLOWNIK.status) out.stan = SLOWNIK.status[out.stan];
+  if (out.sprawy) out.sprawy = out.sprawy.split(',').map(s => s.trim()).filter(Boolean).map(s => SLOWNIK.matters[s] || s).join(', ');
+  return out;
 }
 const list = v => (v || '').split(',').map(s => s.trim()).filter(Boolean);
 
@@ -86,7 +99,7 @@ function walk(dir) {
 }
 const rel = f => path.relative(ROOT, f).split(path.sep).join('/');
 // Do odcisku: treść bez pola „publikacja” i bez końcowych spacji.
-const kanon = raw => raw.replace(/\r\n?/g, '\n').split('\n').filter(l => !/^publikacja:/.test(l)).map(l => l.replace(/\s+$/, '')).join('\n').trim() + '\n';
+const kanon = raw => raw.replace(/\r\n?/g, '\n').split('\n').filter(l => !/^(publikacja|published):/.test(l)).map(l => l.replace(/\s+$/, '')).join('\n').trim() + '\n';
 
 export function wczytaj() {
   const sprawy = walk(path.join(ROOT, SPRAWY)).map(f => {
@@ -174,7 +187,7 @@ export function sprawdz({ zdarzenia, sprawy, dokumenty = [] }) {
     // prywatność: cała treść wpisu
     let tekst = z._kanon;
     for (const d of DOZWOLONE) tekst = tekst.replace(d, '');
-    tekst = tekst.replace(/^(id|rodzice|zrodla|sprawy):.*$/gm, '');
+    tekst = tekst.replace(/^(id|rodzice|zrodla|sprawy|parents|sources|matters):.*$/gm, '');
     for (const [re, co] of WZORY_PRYWATNOSCI) if (re.test(tekst)) bledy.push(z.plik + ': prywatność: ' + co + ' („' + tekst.match(re)[0] + '”)');
     if (pesel(tekst)) uwagi.push(z.plik + ': 11 cyfr z poprawną sumą PESEL („' + pesel(tekst) + '”): sprawdź, czy to nie numer PESEL');
     for (const n of nazwiska) if (new RegExp('(?<![\\p{L}])' + n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?![\\p{L}])', 'iu').test(tekst)) bledy.push(z.plik + ': prywatność: nazwisko z listy lokalnej („' + n + '”)');
