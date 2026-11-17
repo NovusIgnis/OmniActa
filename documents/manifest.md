@@ -1,6 +1,6 @@
 # Manifest Fundacji Novus Ignis
 
-Wersja z 8 listopada 2026 r.
+Wersja z 17 listopada 2026 r.
 
 ## Internet oparty na godności człowieka
 
@@ -24,7 +24,7 @@ W dalszej części manifestu opowiadamy szerzej o ideach, które nam przyświeca
 
 Manifest uzupełniają rozwijane wraz z projektami whitepapery [Suverii](whitepaper-suveria.md), [OmniForum](whitepaper-omniforum.md), [zasad działania fundacji](whitepaper-zasady-fundacji.md) oraz [materiałów do uczenia i benchmarku modeli](whitepaper-materialy-i-benchmark.md); do nich zapraszamy osoby zainteresowane technicznymi sposobami realizacji tych idei. Przedstawiają aktualne rozwiązania techniczne i organizacyjne, ich uzasadnienie oraz znane ograniczenia. Suveria i OmniForum są dziś na wczesnym etapie, od projektów po pierwsze prototypy, a whitepapery pokazują, co już sprawdziliśmy, nad czym pracujemy i jakie możliwości pozostają do zbadania.
 
-**Gdzie jesteśmy dziś.** Fundacja jest zarejestrowana, a manifest i whitepapery są opublikowane. OmniForum ma pierwszy prototyp w budowie, a Suveria jest projektem. Rachunek kosztów z punktu 2.4 jest hipotezą do sprawdzenia, a samodzielne zarządzanie przez cyfrową inteligencję (punkt 7.2) i dalsze filary (rozdział 9) są wizją.
+**Gdzie jesteśmy dziś.** Fundacja jest zarejestrowana, a manifest i whitepapery są opublikowane. Suveria ma lokalny prototyp w pierwszym z czterech etapów prób: korzysta z niego jedna osoba, fundator, a wyniki dopisujemy do dziennika w jej whitepaperze. OmniForum ma pierwszy prototyp w budowie. Rachunek kosztów z punktu 2.4 jest hipotezą do sprawdzenia, a samodzielne zarządzanie przez cyfrową inteligencję (punkt 7.2) i dalsze filary (rozdział 9) są wizją.
 
 ## Spis treści
 
@@ -195,6 +195,8 @@ Tę samą mapę chcemy budować również wokół codziennych zainteresowań: pi
 Połączenie obu tych przestrzeni pozwala zachować zdrową granicę między tym, co intymne, a tym, co obywatelskie. Z długiego, pełnego wahań prywatnego namysłu w Suverii człowiek może wyłonić jedno przemyślane pytanie lub argument i świadomie opublikować je w OmniForum, jednocześnie zachowując resztę swoich notatek i motywacji wyłącznie dla siebie. Ten świadomy krok nazywamy Ceremonią Ignis (*Caerimonia Ignis*). Z kolei wspólna baza wiedzy z OmniForum może służyć jako materiał do prywatnych poszukiwań, również za pomocą prostych dodatków w miejscach, w których ludzie już na co dzień rozmawiają w sieci poza Novus Ignis.
 
 Suveria i OmniForum to dla nas pierwszy krok ku szerszemu ekosystemowi alternatywnego internetu, którego nadrzędną wartością jest godność człowieka. Wierzymy, że te same zasady, takie jak ochrona godności, otwarte formaty danych pozwalające w każdej chwili odejść ze swoim dorobkiem i opłaty możliwie bliskie rzeczywistym kosztom utrzymania infrastruktury, mogą z czasem kształtować kolejne codzienne narzędzia cyfrowe. Chcemy, aby dzięki swojej jakości i uczciwości dawały ludziom realny wybór wobec usług komercyjnych.
+
+Wyobrażamy sobie, że w takim ekosystemie człowiek nie musi już chodzić od okienka do okienka z prośbą o dostęp do własnych rzeczy. Przypomina to raczej spacer po targu z własnym koszykiem: wszystko, co do niego należy, ma u siebie, od usług bierze to, czego akurat potrzebuje, i w każdej chwili może podejść do innego straganu. Usługa dostaje do pracy tylko to, co człowiek świadomie jej poda, i tylko na czas potrzebny do zadania. Tak jak sprzedawca widzi to, co waży, usługa widzi przekazane jej materiały, dlatego przy każdym rozwiązaniu opisujemy, kto i gdzie je przetwarza. To na razie wizja. Jej pierwszy krok, prywatny kontener z codziennymi narzędziami, jest w lokalnej próbie: opisujemy go w [whitepaperze Suverii](whitepaper-suveria.md) (punkt 6.3), wyniki dopisujemy tam do dziennika wyników (rozdział 9), a kto chce się włączyć, znajdzie tam zaproszenie do prób.
 
 Szczegółową architekturę bezpieczeństwa, mechanikę pracy z argumentami oraz plan prób technicznych, do którego dopisujemy kolejne wyniki, opisujemy w rozwijanych równolegle whitepaperach [Suverii](whitepaper-suveria.md) i [OmniForum](whitepaper-omniforum.md).
 
